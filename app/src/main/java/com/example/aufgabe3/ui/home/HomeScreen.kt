@@ -1,6 +1,8 @@
 package com.example.aufgabe3.ui.home
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -12,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.aufgabe3.model.BookingEntry
 import com.example.aufgabe3.viewmodel.SharedViewModel
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +33,9 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate("add")
-            }) {
+            },
+                containerColor = MaterialTheme.colorScheme.primary
+            ) {
                 Icon(Icons.Default.Add, contentDescription = "Add booking")
             }
         }
@@ -41,6 +46,21 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
             // TODO inform the user if no bookingsEntries otherwise LazyColumn for bookingsEntries
+            if (bookingsEntries.isEmpty()) { // Zeigt Nachricht an, wenn keine Buchungen vorhanden sind
+                Text(
+                    text = "No booking entries available.",
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxSize()) { // Liste der Buchungen
+                    items(bookingsEntries) { booking ->
+                        BookingEntryItem(
+                            booking = booking,
+                            onDeleteClick = { sharedViewModel.deleteBookingEntry(booking) }
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -64,11 +84,11 @@ fun BookingEntryItem(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = // TODO display booking name,
+                    text = booking.name, // TODO display booking name,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = // TODO display date in right format,
+                    text = "${booking.arrivalDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))} - ${booking.departureDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))}",// TODO display date in right format,
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
