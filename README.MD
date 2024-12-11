@@ -69,3 +69,7 @@ Es soll eine Android-App mit Jetpack Compose entwickeln, die folgende Funktionen
 ---
 
 **Viel Erfolg bei der Umsetzung der Aufgabe!**
+
+**Name:**
+Karina Ridiger
+**Matrikelnummer:** 215452
